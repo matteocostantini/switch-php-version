@@ -3,12 +3,15 @@
 switch_version()
 {
     echo "Switching to PHP"$version
-    sudo apt install php$version-dev
-    sudo a2dismod php*
-    sudo a2enmod php$version
-    sudo service apache2 restart
+    #sudo apt install php$version-dev
+    #sudo a2dismod php*
+    #sudo a2enmod php$version
+    #sudo service apache2 restart
 
     sudo update-alternatives --set php /usr/bin/php$version
+    sudo update-alternatives --set php-fpm.sock /run/php/php$version-fpm.sock
+    sudo update-alternatives --set php-cgi /usr/bin/php-cgi$version
+    sudo update-alternatives --set php-cgi-bin /usr/lib/cgi-bin/php$version
     sudo update-alternatives --set phar /usr/bin/phar$version
     sudo update-alternatives --set phar.phar /usr/bin/phar.phar$version
     sudo update-alternatives --set phpize /usr/bin/phpize$version
@@ -30,7 +33,7 @@ install_version()
 
 read -p "Please enter the version to switch (Ex. 5.6): `echo '\n> '`" version
 
-dpkg -s php$version 2> /dev/null
+dpkg -s php$version-cli 2> /dev/null
 
 if [ $? -eq 0 ]; then
     switch_version
